@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snippet Pra-Praktikum Jarkom</title>
+<style>
+:root{--bg:#eef2f1;--panel:#fff;--ink:#14201e;--mute:#5b6b68;--line:#d3dcda;--accent:#1b5fd1;--ok:#13795b;--code:#101820;--codeink:#e4edf0}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1514;--panel:#16201f;--ink:#e6eeec;--mute:#93a5a1;--line:#27363a;--accent:#6fa3ff;--ok:#4cc9a0;--code:#0a1013}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 60px;display:grid;grid-template-columns:210px minmax(0,1fr);gap:32px}
+header{grid-column:1/-1}
+h1{margin:0 0 4px;font-size:1.7rem;letter-spacing:-.01em}
+header p{margin:0;color:var(--mute)}
+#q{margin-top:16px;width:100%;max-width:420px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font:inherit}
+#q:focus-visible,.copy:focus-visible,nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+nav{position:sticky;top:16px;align-self:start;display:flex;flex-direction:column;gap:2px}
+nav a{color:var(--mute);text-decoration:none;padding:6px 10px;border-left:2px solid var(--line);font-size:.92rem}
+nav a:hover{color:var(--ink);border-color:var(--accent)}
+section{margin-bottom:36px}
+h2{font-size:1.15rem;margin:0 0 12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.bar{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line)}
+.bar b{font-size:.95rem;font-weight:600;flex:1;min-width:0}
+.tag{font-size:.78rem;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.copy{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
+.copy:hover{background:var(--accent);color:var(--bg)}
+.copy.ok{border-color:var(--ok);color:var(--ok);background:transparent}
+pre{margin:0;padding:14px;background:var(--code);color:var(--codeink);overflow-x:auto;font:13.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;tab-size:4}
+.note{margin:0;padding:8px 12px;font-size:.85rem;color:var(--mute);border-top:1px solid var(--line)}
+.sh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.sh h2{margin:0}
+.top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}.top #q{margin-top:0;flex:1;min-width:200px}
+#empty{display:none;color:var(--mute)}
+@media (max-width:800px){
+.wrap{grid-template-columns:1fr;gap:16px}
+nav{position:static;flex-direction:row;overflow-x:auto;gap:6px}
+nav a{border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Snippet Pra-Praktikum Jarkom</h1>
+<p>Semua perintah dan konfigurasi dari laporan, tinggal klik Salin. Prefix IP 10.212, topologi GNS3.</p>
+<div class="top"><input id="q" type="search" placeholder="Cari snippet, misal: kea, iptables, curl" aria-label="Cari snippet"><button class="copy" id="all" type="button">Salin semua</button></div>
+</header>
+<nav id="nav" aria-label="Daftar bagian"></nav>
+<main id="main"><p id="empty">Tidak ada snippet yang cocok. Coba kata kunci lain.</p></main>
+</div>
+<script>
+const G=[
+{id:"a32",title:"A.3.2 Network dan static routing",items:[
+{t:"/etc/network/interfaces",node:"RhodesIsland",lang:"bash",code:`auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+    address 10.212.1.1
+    netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+    address 10.212.2.1
+    netmask 255.255.255.0`},
+{t:"/etc/network/interfaces",node:"Lungmen",lang:"bash",code:`auto eth0
+iface eth0 inet static
+    address 10.212.1.2
+    netmask 255.255.255.0
+    gateway 10.212.1.1
+
+auto eth1
+iface eth1 inet static
+    address 10.212.3.1
+    netmask 255.255.255.0`},
+{t:"/etc/network/interfaces",node:"Ursus",lang:"bash",code:`auto eth0
+iface eth0 inet static
+    address 10.212.2.2
+    netmask 255.255.255.0
+    gateway 10.212.2.1
+
+auto eth1
+iface eth1 inet static
+    address 10.212.4.1
+    netmask 255.255.255.0`},
+{t:"Static routing (ip route add)",node:"RhodesIsland",lang:"bash",code:`ip route add 10.212.3.0/24 via 10.212.1.2 dev eth1
+ip route add 10.212.4.0/24 via 10.212.2.2 dev eth2`},
+{t:"Static routing (ip route add)",node:"Lungmen",lang:"bash",code:`ip route add 10.212.2.0/24 via 10.212.1.1 dev eth0
+ip route add 10.212.4.0/24 via 10.212.1.1 dev eth0`},
+{t:"Static routing (ip route add)",node:"Ursus",lang:"bash",code:`ip route add 10.212.1.0/24 via 10.212.2.1 dev eth0
+ip route add 10.212.3.0/24 via 10.212.2.1 dev eth0`}
+]},
+{id:"a33",title:"A.3.3 NAT dan DNS",items:[
+{t:"NAT MASQUERADE",node:"RhodesIsland",lang:"bash",code:`iptables -t nat -A POSTROUTING -j MASQUERADE -s 10.212.0.0/16 -o eth0`},
+{t:"DNS resolver",node:"Semua node",lang:"bash",code:`echo "nameserver 8.8.8.8" > /etc/resolv.conf`}
+]},
+{id:"a34",title:"A.3.4 DHCP server (kea-dhcp4)",items:[
+{t:"/etc/kea/kea-dhcp4.conf",node:"Victoria",lang:"json",code:`{
+  "Dhcp4": {
+    "interfaces-config": { "interfaces": ["eth0"] },
+    "lease-database": { "type": "memfile", "persist": true, "name": "/var/lib/kea/kea-leases4.csv" },
+    "valid-lifetime": 3600,
+    "subnet4": [
+      {
+        "id": 1,
+        "subnet": "10.212.3.0/24",
+        "pools": [ { "pool": "10.212.3.100 - 10.212.3.120" } ],
+        "option-data": [
+          { "name": "routers", "data": "10.212.3.1" },
+          { "name": "domain-name-servers", "data": "8.8.8.8" }
+        ]
+      }
+    ]
+  }
+}`},
+{t:"/etc/kea/kea-dhcp4.conf",node:"Yan",lang:"json",note:"Ganti <MAC_ETH0_LATERANO> dengan MAC eth0 Laterano.",code:`{
+  "Dhcp4": {
+    "interfaces-config": { "interfaces": ["eth0"] },
+    "lease-database": { "type": "memfile", "persist": true, "name": "/var/lib/kea/kea-leases4.csv" },
+    "valid-lifetime": 3600,
+    "subnet4": [
+      {
+        "id": 1,
+        "subnet": "10.212.4.0/24",
+        "pools": [ { "pool": "10.212.4.50 - 10.212.4.60" } ],
+        "option-data": [
+          { "name": "routers", "data": "10.212.4.1" },
+          { "name": "domain-name-servers", "data": "8.8.8.8" }
+        ],
+        "reservations": [
+          { "hw-address": "<MAC_ETH0_LATERANO>", "ip-address": "10.212.4.15" }
+        ]
+      }
+    ]
+  }
+}`}
+]},
+{id:"a35",title:"A.3.5 HTTP server dan berkas uji",items:[
+{t:"/root/myscripts/start_http.sh",node:"Laterano",lang:"bash",code:`#!/bin/sh
+mkdir -p /root/myscripts/myweb
+cd /root/myscripts/myweb
+python3 -m http.server 9999`},
+{t:"Buat berkas uji dengan dd",node:"Laterano",lang:"bash",code:`cd /root/myscripts/myweb
+dd if=/dev/urandom of=tes1000.bin   bs=1    count=1000
+dd if=/dev/urandom of=tes10000.bin  bs=10   count=1000
+dd if=/dev/urandom of=tes50000.bin  bs=50   count=1000
+dd if=/dev/urandom of=tes5M.bin     bs=5000 count=1000`}
+]},
+{id:"wireshark",title:"Filter Wireshark (Bagian A sampai E)",items:[
+{t:"Filter capture dan field yang dipakai",node:"Columbia / Laterano",lang:"text",code:`tcp.port == 9999
+tcp.analysis.retransmission
+tcp.analysis.fast_retransmission
+tcp.analysis.duplicate_ack
+tcp.analysis.ack_rtt
+tcp.analysis.bytes_in_flight
+tcp.window_size_value
+tcp.seq
+tcp.ack
+tcp.len
+tcp.flags.syn
+tcp.flags.ack
+tcp.flags.fin`}
+]},
+{id:"c2",title:"C.2 Congestion control (CUBIC vs Reno)",items:[
+{t:"Set algoritma CUBIC",node:"Laterano",lang:"bash",code:`ip tcp_metrics flush
+sysctl -w net.ipv4.tcp_no_metrics_save=1
+sysctl -w net.ipv4.tcp_congestion_control=cubic
+sysctl net.ipv4.tcp_congestion_control`},
+{t:"Set algoritma Reno",node:"Laterano",lang:"bash",code:`sysctl -w net.ipv4.tcp_no_metrics_save=1
+sysctl -w net.ipv4.tcp_congestion_control=reno
+sysctl net.ipv4.tcp_congestion_control`},
+{t:"Download tes5M.bin dan ukur kecepatan",node:"Columbia",lang:"bash",code:`curl -o /dev/null -s -w "size=%{size_download}B speed=%{speed_download}B/s total=%{time_total}s\\n" http://10.212.4.15:9999/tes5M.bin`}
+]},
+{id:"d3",title:"D.3 iperf3 TCP vs UDP",items:[
+{t:"Jalankan server iperf3",node:"Laterano",lang:"bash",code:`iperf3 -s`},
+{t:"Client TCP",node:"Columbia",lang:"bash",code:`iperf3 -c 10.212.4.15 -t 10`},
+{t:"Client UDP",node:"Columbia",lang:"bash",code:`iperf3 -c 10.212.4.15 -u -b 5M -t 10`}
+]}
+];
+
+const main=document.getElementById("main"),nav=document.getElementById("nav"),empty=document.getElementById("empty");
+const join=a=>a.map(i=>"# "+i.t+" ("+i.node+")\n"+i.code).join("\n\n");
+function copy(text,btn,label){label=label||"Salin";
+  const done=()=>{btn.textContent="Tersalin";btn.classList.add("ok");setTimeout(()=>{btn.textContent=label;btn.classList.remove("ok")},1400)};
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(done,fallback)}else fallback();
+  function fallback(){const a=document.createElement("textarea");a.value=text;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();try{document.execCommand("copy");done()}catch(e){btn.textContent="Gagal"}a.remove()}
+}
+const secs=G.map(g=>{
+  const s=document.createElement("section");s.id=g.id;
+  const sh=document.createElement("div");sh.className="sh";
+  const h=document.createElement("h2");h.textContent=g.title;
+  const sb=document.createElement("button");sb.className="copy";sb.type="button";sb.textContent="Salin semua";
+  sb.onclick=()=>copy(join(g.items),sb,"Salin semua");
+  sh.append(h,sb);s.appendChild(sh);
+  const cards=g.items.map(i=>{
+    const c=document.createElement("div");c.className="card";
+    const bar=document.createElement("div");bar.className="bar";
+    const b=document.createElement("b");b.textContent=i.t;
+    const tag=document.createElement("span");tag.className="tag";tag.textContent=i.node;
+    const btn=document.createElement("button");btn.className="copy";btn.type="button";btn.textContent="Salin";
+    btn.setAttribute("aria-label","Salin "+i.t+" "+i.node);
+    btn.onclick=()=>copy(i.code,btn);
+    bar.append(b,tag,btn);
+    const pre=document.createElement("pre");const code=document.createElement("code");code.textContent=i.code;pre.appendChild(code);
+    c.append(bar,pre);
+    if(i.note){const n=document.createElement("p");n.className="note";n.textContent=i.note;c.appendChild(n)}
+    c.dataset.k=(i.t+" "+i.node+" "+i.code).toLowerCase();
+    s.appendChild(c);return c;
+  });
+  main.insertBefore(s,empty);
+  const a=document.createElement("a");a.href="#"+g.id;a.textContent=g.title.replace(/\s*\(.*\)/,"");nav.appendChild(a);
+  return {s,cards};
+});
+const ab=document.getElementById("all");ab.onclick=()=>copy(G.map(g=>"##### "+g.title+"\n\n"+join(g.items)).join("\n\n\n"),ab,"Salin semua");
+document.getElementById("q").addEventListener("input",e=>{
+  const k=e.target.value.trim().toLowerCase();let any=false;
+  secs.forEach(({s,cards})=>{
+    let n=0;cards.forEach(c=>{const m=!k||c.dataset.k.includes(k);c.style.display=m?"":"none";if(m)n++});
+    s.style.display=n?"":"none";if(n)any=true;
+  });
+  empty.style.display=any?"none":"block";
+});
+</script>
+</body>
+</html>
